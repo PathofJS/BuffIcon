@@ -3,14 +3,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     const keywordFilterContainer = document.getElementById('keywordFilterContainer');
     const iconSearchInput = document.getElementById('iconSearchInput');
     const clearSearchButton = document.getElementById('clearSearchButton');
-    const stickyHeader = document.getElementById('stickyHeader'); // Get the sticky header
-    const headerSpacer = document.getElementById('headerSpacer'); // Get the spacer div
+    const stickyHeader = document.getElementById('stickyHeader');
+    const headerSpacer = document.getElementById('headerSpacer');
+    const themeToggleButton = document.createElement('button'); // New: Theme toggle button
 
     let allImageData = [];
 
     // Function to set the height of the spacer div dynamically
     function setSpacerHeight() {
-        // Get the computed height of the sticky header
         const headerHeight = stickyHeader.offsetHeight;
         headerSpacer.style.height = `${headerHeight}px`;
     }
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     async function loadAndAnalyzeImages() {
-        imageGallery.innerHTML = '<p>Loading icons... <span class="loading-spinner"></span></p>';
+        imageGallery.innerHTML = '<p>Loading buffs... <span class="loading-spinner"></span></p>';
         
         const iconsToProcess = await fetchAndMergeBuffData();
 
@@ -174,8 +174,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         let filteredImages = allImageData.filter(imageData => {
             const matchesSearch = searchQuery === '' || imageData.searchableText.includes(searchQuery);
+            // This ensures that ALL selected keywords are present in the searchableText
             const matchesKeywords = selectedKeywords.length === 0 || 
-                                    selectedKeywords.some(selectedKw => imageData.searchableText.includes(selectedKw));
+                                    selectedKeywords.every(selectedKw => imageData.searchableText.includes(selectedKw));
             return matchesSearch && matchesKeywords;
         });
         
@@ -231,6 +232,46 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 
     toggleClearSearchButton();
+
+    // Dark mode toggle functionality
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        // Store user preference in local storage
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            themeToggleButton.textContent = 'Light Mode 💡';
+        } else {
+            localStorage.setItem('theme', 'light');
+            themeToggleButton.textContent = 'Dark Mode 🌙';
+        }
+    }
+
+    // Set initial theme based on local storage or system preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.body.classList.add('dark-mode');
+        themeToggleButton.textContent = 'Light Mode 💡';
+    } else {
+        themeToggleButton.textContent = 'Dark Mode 🌙';
+    }
+
+    // Add theme toggle button and title to a flexible container in the header
+    themeToggleButton.classList.add('theme-toggle-button');
+    themeToggleButton.addEventListener('click', toggleDarkMode);
+    
+    const headerTitleAndToggleContainer = document.createElement('div');
+    headerTitleAndToggleContainer.style.display = 'flex';
+    headerTitleAndToggleContainer.style.justifyContent = 'space-between';
+    headerTitleAndToggleContainer.style.alignItems = 'center';
+    headerTitleAndToggleContainer.style.width = '100%'; // Ensure it takes full width
+
+    const h1Element = document.createElement('h1');
+    h1Element.textContent = 'PoE Buff Icons';
+    headerTitleAndToggleContainer.appendChild(h1Element);
+    headerTitleAndToggleContainer.appendChild(themeToggleButton);
+
+    // Insert this new container at the top of the sticky header
+    stickyHeader.prepend(headerTitleAndToggleContainer);
 
     // Initial call to load and analyze images
     loadAndAnalyzeImages();

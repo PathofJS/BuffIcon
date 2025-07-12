@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PoE Buffs Icons</title>
+    <title>Buffs Icon Gallery</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0; /* Reset default body margin */
-            /* No padding-top needed here anymore */
+            background-color: #f4f4f4; /* Light mode default */
+            color: #333; /* Light mode default text color */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
         }
 
         #stickyHeader {
@@ -16,18 +24,29 @@
             top: 0; /* Position it at the top */
             left: 0;
             width: 100%; /* Full width */
-            background-color: #f4f4f4;
+            background-color: #f4f4f4; /* Light mode default */
             padding: 15px 20px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             z-index: 1000; /* Ensure it stays on top of other content */
             box-sizing: border-box; /* Include padding in width */
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode #stickyHeader {
+            background-color: #2c2c2c;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
         }
 
         #stickyHeader h1 {
             margin-top: 0;
             margin-bottom: 15px;
             font-size: 1.8em;
-            color: #333;
+            color: #333; /* Light mode default */
+            transition: color 0.3s;
+        }
+
+        body.dark-mode #stickyHeader h1 {
+            color: #f0f0f0;
         }
 
         #searchContainer {
@@ -40,9 +59,18 @@
         #iconSearchInput {
             width: calc(100% - 40px); /* Adjust width to accommodate the button */
             padding: 10px 10px 10px 35px; /* Left padding for clear button */
-            border: 1px solid #ccc;
+            border: 1px solid #ccc; /* Light mode default */
             border-radius: 5px;
             font-size: 1em;
+            background-color: #fff; /* Light mode default */
+            color: #333; /* Light mode default */
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body.dark-mode #iconSearchInput {
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            border-color: #555;
         }
 
         .clear-search-button {
@@ -53,26 +81,41 @@
             background: none;
             border: none;
             font-size: 1.2em;
-            color: #aaa;
+            color: #aaa; /* Light mode default */
             cursor: pointer;
             padding: 0 5px;
             display: none; /* Hidden by default, shown when text is present */
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .clear-search-button {
+            color: #bbb;
         }
 
         .clear-search-button:hover {
-            color: #555;
+            color: #555; /* Light mode default */
+        }
+
+        body.dark-mode .clear-search-button:hover {
+            color: #ddd;
         }
 
         #keywordFilterContainer {
             margin-bottom: 20px;
-            padding: 10px 0; /* Adjusted padding as it's now inside the sticky header */
-            border-top: 1px solid #eee;
+            padding: 10px 0;
+            border-top: 1px solid #eee; /* Light mode default */
             padding-top: 10px;
+            transition: border-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode #keywordFilterContainer {
+            border-color: #444;
+            color: #e0e0e0;
         }
 
         .keyword-label {
             margin-right: 15px;
-            display: inline-flex; /* Use flex for better alignment */
+            display: inline-flex;
             align-items: center;
             padding: 5px 0;
         }
@@ -82,43 +125,56 @@
         }
 
         #keywordFilterContainer button {
-            margin-left: 10px; /* Adjust margin */
+            margin-left: 10px;
             padding: 5px 10px;
             cursor: pointer;
-            border: 1px solid #007bff;
-            background-color: #007bff;
+            border: 1px solid #007bff; /* Light mode default */
+            background-color: #007bff; /* Light mode default */
             color: white;
             border-radius: 5px;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        body.dark-mode #keywordFilterContainer button {
+            border: 1px solid #66b3ff;
+            background-color: #66b3ff;
         }
 
         #keywordFilterContainer button:hover {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Light mode default */
+        }
+
+        body.dark-mode #keywordFilterContainer button:hover {
+            background-color: #4da6ff;
         }
 
         /* New spacer element to push content down */
         #headerSpacer {
             height: 180px; /* This height should match the effective height of #stickyHeader */
             width: 100%;
-            /* No background or visual properties needed, just takes up space */
         }
 
         #imageGallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
-            padding: 0 20px; /* Add horizontal padding to the gallery */
-            /* No margin-top needed here, as the spacer handles the offset */
+            padding: 0 20px;
         }
 
         .image-item {
-            border: 1px solid #ddd;
+            border: 1px solid #ddd; /* Light mode default */
             padding: 10px;
             text-align: center;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: #fff; /* Light mode default */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Light mode default */
             border-radius: 8px;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .image-item {
+            border: 1px solid #444;
+            background-color: #333;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .image-item:hover {
@@ -134,18 +190,28 @@
 
         .icon-name {
             font-weight: bold;
-            color: #333;
+            color: #333; /* Light mode default */
             margin-bottom: 5px;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .icon-name {
+            color: #f0f0f0;
         }
 
         .icon-description {
             font-size: 0.9em;
-            color: #666;
+            color: #666; /* Light mode default */
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .icon-description {
+            color: #b0b0b0;
         }
 
         .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
+            border: 4px solid #f3f3f3; /* Light mode default */
+            border-top: 4px solid #3498db; /* Light mode default */
             border-radius: 50%;
             width: 16px;
             height: 16px;
@@ -155,21 +221,55 @@
             margin-left: 5px;
         }
 
+        body.dark-mode .loading-spinner {
+            border-color: #3a3a3a;
+            border-top-color: #66b3ff;
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
         .error-message {
-            color: red;
+            color: red; /* Consistent across themes for error visibility */
             font-weight: bold;
+        }
+
+        /* Dark mode toggle button style */
+        .theme-toggle-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.2s ease;
+        }
+
+        body.dark-mode .theme-toggle-button {
+            background-color: #66b3ff;
+        }
+
+        .theme-toggle-button:hover {
+            background-color: #0056b3;
+        }
+
+        body.dark-mode .theme-toggle-button:hover {
+            background-color: #4da6ff;
+        }
+
+        .header-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
     </style>
     <script src="https://unpkg.com/colorthief@2.3.2/dist/color-thief.umd.js"></script>
 </head>
 <body>
     <div id="stickyHeader">
-        <h1>PoE Buffs Icons</h1>
         <div id="searchContainer">
             <button id="clearSearchButton" class="clear-search-button">✖</button>
             <input type="text" id="iconSearchInput" placeholder="Search buffs...">
@@ -181,7 +281,7 @@
     <div id="headerSpacer"></div>
 
     <div id="imageGallery">
-        <p>Loading buff icons...</p>
+        <p>Loading buffs...</p>
     </div>
 
     <script src="script.js"></script>
